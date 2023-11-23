@@ -35,3 +35,7 @@ streamlit run dashboard.py
 ![TAMPILAN 4](screenshot/image-3.png)
 
 ![TAMPILAN 5](screenshot/image-4.png)
+
+![TAMPILAN 6](screenshot/image-5.png)
+
+![TAMPILAN 7](screenshot/image-6.png)
