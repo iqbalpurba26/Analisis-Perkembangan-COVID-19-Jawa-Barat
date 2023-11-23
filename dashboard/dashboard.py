@@ -72,10 +72,6 @@ sum_case_df = create_sum_positive_df(main_df)
 sum_heald_df = create_sum_heald_df(main_df)
 sum_die_df = create_sum_die_df(main_df)
 
-total_kasus = daily_case_cov_df['kasus'].sum()
-meninggal = daily_die_cov_df['meninggal'].sum()
-sembuh = daily_heald_cov_df['sembuh'].sum()
-
 
 total_kasus = sum_case_df.at[sum_case_df.index[-1], 'akumulasi_kasus']
 total_sembuh = sum_heald_df.at[sum_heald_df.index[-1], 'akumulasi_sembuh']
@@ -92,14 +88,20 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.metric("Penambahan Kasus Baru", value="{:,}".format(total_kasus))
 with col2:
-    st.metric("Sembuh ", value="{:,}".format(sembuh))
+    st.metric("Sembuh ", value="{:,}".format(total_sembuh))
 with col3:
-    st.metric("Meninggal", value="{:,}".format(meninggal))
+    st.metric("Meninggal", value="{:,}".format(total_meninggal))
 st.divider()
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-st.subheader('PERKEMBANGAN KASUS BARU, SEMBUH, DAN MENINGGAL')
+
+st.write("Kasus pertama kali warga negara Indonesia terinfeksi Corona Virus Disease (COVID-19) terjadi pada 2 Maret 2020. Sejak saat itu, kasus COVID-19 di Indonesia semakin banyak. Mengutip dari CNBC Indonesia, pertambahan kasus baru harian COVID-19 pada September 2020 lalu di wilayah Jawa Barat terpantau mengalami lonjakan setiap harinya.")
+
+st.write("Berikut ini hasil ekplorasi data dan visualisasi data perkembangan kasus COVID-19 di Jawa Barat pada Maret 2020 - April 2022")
+
+
+st.subheader('PERKEMBANGAN KASUS BARU DI JAWA BARAT')
 
 plt.figure(figsize=(14, 5))
 plt.plot(daily_case_cov_df['tanggal'],
@@ -110,7 +112,22 @@ plt.title('Penambahan Kasus Baru Setiap Hari')
 plt.grid()
 st.pyplot(plt)
 
+index_kasus_tinggi = daily_case_cov_df['kasus'].idxmax()
+penambahan_terbanyak_tanggal = daily_case_cov_df.loc[index_kasus_tinggi, 'tanggal'].date(
+)
+penambahan_terbanyak_total = daily_case_cov_df['kasus'].max()
+
+index_kasus_rendah = daily_case_cov_df['kasus'].idxmin()
+tanggal_terendah = daily_case_cov_df.loc[index_kasus_rendah, 'tanggal'].date()
+total_rendah = daily_case_cov_df['kasus'].min()
+
+st.write(
+    f"Berdasarkan hasil visualisasi data tersebut dapat dilihat perkembangan bagaimana kasus bertambah setiap hari. Total kasus penambahan tertinggi terjadi pada tanggal **{penambahan_terbanyak_tanggal}**, dengan total kasus pertambahan sebesar **{penambahan_terbanyak_total} kasus**. Sedangkan penambahan kasus terendah terjadi pada tanggal **{tanggal_terendah}**, dengan pertambahan sebesar **{total_rendah} kasus**")
+
+
 st.markdown("<br>", unsafe_allow_html=True)
+
+st.subheader('PERKEMBANGAN KASUS SEMBUH DI JAWA BARAT')
 
 plt.figure(figsize=(14, 5))
 plt.plot(daily_heald_cov_df['tanggal'],
@@ -121,8 +138,22 @@ plt.title('Penambahan Kasus Sembuh Setiap Hari')
 plt.grid()
 st.pyplot(plt)
 
+
+sembuh_tertinggi = daily_heald_cov_df['sembuh'].max()
+index = daily_heald_cov_df['sembuh'].idxmax()
+tanggal_sembuh_tertinggi = daily_heald_cov_df.loc[index, 'tanggal'].date()
+
+sembuh_rendah = daily_heald_cov_df['sembuh'].min()
+index_rendah = daily_heald_cov_df['sembuh'].idxmin()
+tanggal_sembuh_rendah = daily_heald_cov_df.loc[index_rendah, 'tanggal'].date()
+
+st.write(
+    f"Grafik diatas menunjukkan perkembangan kasus sembuh harian. Total kasus sembuh tertinggi terjadi pada tanggal**{tanggal_sembuh_tertinggi}** , dengan total kasus pertambahan sebesar **{sembuh_tertinggi} kasus**. Sedangkan penambahan kasus sembuh terendah terjadi pada tanggal **{tanggal_sembuh_rendah}**, dengan pertambahan sebesar **{sembuh_rendah} kasus**")
+
+
 st.markdown("<br>", unsafe_allow_html=True)
 
+st.subheader('PERKEMBANGAN KASUS MENINGGAL DI JAWA BARAT')
 plt.figure(figsize=(14, 5))
 plt.plot(daily_die_cov_df['tanggal'],
          daily_die_cov_df['meninggal'], color='black')
@@ -131,6 +162,20 @@ plt.ylabel('kasus')
 plt.title('Penambahan Kasus Kematian Setiap Hari')
 plt.grid()
 st.pyplot(plt)
+
+
+meninggal_tertinggi = daily_die_cov_df['meninggal'].max()
+index_meninggal = daily_die_cov_df['meninggal'].idxmax()
+tanggal_meninggal_tertinggi = daily_die_cov_df.loc[index_meninggal, 'tanggal'].date(
+)
+
+meninggal_rendah = daily_die_cov_df['meninggal'].min()
+index_meninggal_rendah = daily_die_cov_df['meninggal'].idxmin()
+tanggal_meninggal_rendah = daily_die_cov_df.loc[index_rendah, 'tanggal'].date()
+
+st.write(
+    f"Grafik diatas menunjukkan perkembangan kasus meninggal harian. Total kasus meninggal tertinggi terjadi pada tanggal **{tanggal_meninggal_tertinggi}** , dengan total kasus pertambahan sebesar **{meninggal_tertinggi} kasus**. Sedangkan penambahan kasus meninggal terendah terjadi pada tanggal **{tanggal_meninggal_rendah}**, dengan pertambahan sebesar **{meninggal_rendah} kasus**")
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -167,6 +212,11 @@ plt.ylabel('Akumulasi')
 plt.title('Akumulasi Kasus Meninggal')
 plt.grid()
 st.pyplot(plt)
+
+
+st.write(
+    f"Perbandingan akumulasi dari penambahan kasus, sembuh, dan meninggal di akhir periode adalah masing- masing sebesar **{total_kasus} kasus, {total_sembuh} kasus, {total_meninggal} kasus**. ")
+
 
 st.markdown("<br>", unsafe_allow_html=True)
 
